@@ -38,6 +38,7 @@
   "author": {
     "name": "Mathias Buus"
   },
+
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mafintosh/docker-browser-console/issues"
