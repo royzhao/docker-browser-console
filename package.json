@@ -1,0 +1,54 @@
+{
+  "name": "docker-browser-console",
+  "version": "5.0.0",
+  "description": "Forward input/output from docker containers to your browser",
+  "main": "index.js",
+  "browser": "browser.js",
+  "browserify": {
+    "transform": [
+      "brfs"
+    ]
+  },
+  "dependencies": {
+    "brfs": "^1.2.0",
+    "computed-style": "^0.1.3",
+    "defaultcss": "0.0.2",
+    "docker-run": "^2.0.0",
+    "duplexify": "^3.2.0",
+    "ndjson": "^1.2.3",
+    "term.js": "^0.0.4",
+    "xtend": "^4.0.0"
+  },
+  "devDependencies": {
+    "browserify": "^5.12.1",
+    "pump": "^1.0.0",
+    "websocket-stream": "^1.0.2",
+    "ws": "^0.4.32"
+  },
+  "scripts": {
+    "demo": "browserify demo/index.js > demo/bundle.js; node demo/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mafintosh/docker-browser-console"
+  },
+  "keywords": [
+    "docker"
+  ],
+  "author": {
+    "name": "Mathias Buus"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mafintosh/docker-browser-console/issues"
+  },
+  "homepage": "https://github.com/mafintosh/docker-browser-console",
+  "readme": "# docker-browser-console\n\nForward input/output from docker containers to your browser\n\n```\nnpm install docker-browser-console\n```\n\nTo quickly try out a demo clone this repo and\n\n```\nnpm install\nnpm run demo\n```\n\n## Browser usage\n\nFirst browserify the following code to `bundle.js` to create a terminal in your browser\n\n``` js\nvar docker = require('docker-browser-console')\nvar websocket = require('websocket-stream')\n\n// create a stream for any docker image\n// use docker({style:false}) to disable default styling\n// all other options are forwarded to the term.js instance\nvar terminal = docker()\n\n// connect to a docker-browser-console server\nterminal.pipe(websocket('ws://localhost:10000')).pipe(terminal)\n\n// append the terminal to a DOM element\nterminal.appendTo(document.body)\n```\n\nYou can add that to an `index.html` page by doing\n\n``` html\n<!DOCTYPE html>\n<html>\n<body>\n  <script src=\"bundle.js\">\n</body>\n</html>\n```\n\n## Server usage\n\nThen create a server that will host our docker containers\n\n``` js\nvar ws = require('ws')\nvar websocket = require('websocket-stream')\nvar docker = require('docker-browser-console')\n\nvar server = new ws.WebSocketServer({port:10000})\n\nserver.on('connection', function(socket) {\n  socket = websocket(socket)\n  // this will spawn the container and forward the output to the browser\n  socket.pipe(docker('mafintosh/dev')).pipe(socket)\n})\n```\n\nNow simply run the server and open `index.html` in your browser.\nYou should be able to see a terminal running my dev image\n\n## License\n\nMIT",
+  "readmeFilename": "README.md",
+  "_id": "docker-browser-console@5.0.0",
+  "dist": {
+    "shasum": "eedc9e92bfc81a8ba6bb54349cd876e1709b8d7c"
+  },
+  "_from": "docker-browser-console@^5.0.0",
+  "_resolved": "https://registry.npmjs.org/docker-browser-console/-/docker-browser-console-5.0.0.tgz"
+}
