@@ -44,11 +44,12 @@ module.exports = function(image, opts) {
     })
 
     child.on('error', function(err) {
+        console.log(err)
         output.write({
             type: 'stderr',
             data: err.toString()
         })
-      result.destroy(err)
+      result.destroy()
     })
 
     result.on('close', function() {
